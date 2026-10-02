@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mindset Coffee — POS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-art">
+      <div class="login-brand">
+        <div class="cup">☕</div>
+        <div><div class="brand-big">Mindset</div><small>GOOD COFFEE • BETTER MINDSET</small></div>
+      </div>
+      <div class="login-slogan">Một ly cà phê<br><em>cho những ý tưởng lớn.</em></div>
+      <div class="login-mountain">⌁⌁⌁</div>
+    </div>
+    <div class="login-panel">
+      <div class="mobile-brand">☕ Mindset</div>
+      <div class="login-card">
+        <span class="eyebrow">WELCOME BACK</span>
+        <h1>Đăng nhập</h1>
+        <p class="muted">Đăng nhập để sử dụng hệ thống quản lý Mindset.</p>
+        <form id="loginForm">
+          <label>Tài khoản</label>
+          <input id="loginUser" required autocomplete="username" placeholder="Nhập tài khoản">
+          <label>Mật khẩu</label>
+          <div class="password-wrap"><input id="loginPass" required type="password" autocomplete="current-password" placeholder="Nhập mật khẩu"><button type="button" id="togglePass">◉</button></div>
+          <button class="login-btn" type="submit">Đăng nhập <span>→</span></button>
+        </form>
+        <div class="demo-box">
+          <b>Tài khoản demo</b>
+          <div>Admin: <code>admin</code> / <code>admin123</code></div>
+          <div>Nhân viên: <code>nhanvien</code> / <code>123456</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="appScreen" class="hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="cup">☕</div>
+        <div><div class="brand-name">Mindset</div><small>GOOD COFFEE • BETTER MINDSET</small></div>
+      </div>
+      <div id="userBox" class="user-box"></div>
+      <nav id="adminNav" class="hidden">
+        <div class="nav-label">QUẢN LÝ</div>
+        <button class="nav active" data-page="dashboard">⌂ <span>Tổng quan</span></button>
+        <button class="nav" data-page="accounts">♙ <span>Quản lý tài khoản</span></button>
+        <button class="nav" data-page="menu">☕ <span>Món & Topping</span></button>
+        <button class="nav" data-page="qr">▣ <span>QR chuyển khoản</span></button>
+        <button class="nav" data-page="revenue">▥ <span>Doanh thu</span></button>
+        <button class="nav" data-page="shifts">◷ <span>Quản lý ca</span></button>
+      </nav>
+      <nav id="staffNav" class="hidden">
+        <div class="nav-label">BÁN HÀNG</div>
+        <button class="nav active" data-page="pos">☕ <span>POS bán hàng</span></button>
+        <button class="nav" data-page="myOrders">▣ <span>Đơn của tôi</span></button>
+        <button class="nav" data-page="myShift">◷ <span>Ca làm việc</span></button>
+      </nav>
+      <div class="sidebar-bottom">“Một ly cà phê<br>cho những ý tưởng lớn!”</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><div id="pageTitle" class="page-title">Tổng quan</div><div class="breadcrumb">Mindset Coffee / <span id="crumb">Dashboard</span></div></div>
+        <div class="top-actions"><span id="clock"></span><span id="online">● Online</span><button id="logout" class="logout">↪ Đăng xuất</button></div>
+      </header>
+
+      <!-- ADMIN DASHBOARD -->
+      <section id="page-dashboard" class="page admin-page">
+        <div class="welcome"><div><span class="eyebrow">MINDSET POS</span><h2>Xin chào, <span id="helloName"></span> 👋</h2><p class="muted">Theo dõi hoạt động quán trong hôm nay.</p></div><button class="primary" data-page-link="pos">Mở POS</button></div>
+        <div class="stats">
+          <div class="stat"><span>Doanh thu hôm nay</span><b id="dashToday">0đ</b><small>So với hôm qua</small></div>
+          <div class="stat"><span>Doanh thu tháng</span><b id="dashMonth">0đ</b><small>Đơn đã thanh toán</small></div>
+          <div class="stat"><span>Đơn hàng</span><b id="dashOrders">0</b><small>Tổng đơn</small></div>
+          <div class="stat"><span>Nhân viên đang làm</span><b id="dashStaff">0</b><small>Đang mở ca</small></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="section-head"><h3>Doanh thu 7 ngày</h3><button class="text-btn" data-page-link="revenue">Xem chi tiết →</button></div><div id="miniChart" class="chart"></div></div>
+          <div class="card"><div class="section-head"><h3>Đơn gần đây</h3><button class="text-btn" data-page-link="revenue">Tất cả →</button></div><div id="recentOrders"></div></div>
+        </div>
+      </section>
+
+      <!-- ADMIN ACCOUNTS -->
+      <section id="page-accounts" class="page admin-page hidden">
+        <div class="section-head"><div><h2>Quản lý tài khoản</h2><p class="muted">Thêm, sửa, xóa tài khoản và cấp quyền quản lý.</p></div><button class="primary" id="addAccount">+ Thêm tài khoản</button></div>
+        <div class="card"><div id="accountsTable"></div></div>
+      </section>
+
+      <!-- ADMIN MENU -->
+      <section id="page-menu" class="page admin-page hidden">
+        <div class="section-head"><div><h2>Món & Topping</h2><p class="muted">Quản lý menu, giá bán và hình ảnh.</p></div><div><button class="outline" id="addTopping">+ Topping</button> <button class="primary" id="addProduct">+ Thêm món</button></div></div>
+        <div class="tabs"><button class="tab active" data-menu-tab="products">Món</button><button class="tab" data-menu-tab="toppings">Topping</button></div>
+        <div class="card"><div id="menuTable"></div></div>
+      </section>
+
+      <!-- ADMIN QR -->
+      <section id="page-qr" class="page admin-page hidden">
+        <div class="section-head"><div><h2>QR chuyển khoản</h2><p class="muted">QR này sẽ hiển thị trên màn hình nhân viên khi chọn chuyển khoản.</p></div></div>
+        <div class="qr-admin-grid">
+          <div class="card">
+            <h3>Upload QR từ file</h3><p class="muted">PNG, JPG hoặc WEBP.</p>
+            <input type="file" id="qrUpload" accept="image/*">
+            <button class="primary" id="saveQr">Lưu QR</button>
+          </div>
+          <div class="card qr-card"><h3>QR hiện tại</h3><div id="adminQr"></div><button class="danger-outline" id="removeQr">Xóa QR</button></div>
+        </div>
+      </section>
+
+      <!-- ADMIN REVENUE -->
+      <section id="page-revenue" class="page admin-page hidden">
+        <div class="section-head"><div><h2>Doanh thu</h2><p class="muted">Xem theo ngày, tháng và nhân viên/ca.</p></div>
+          <div class="filters"><input type="date" id="revenueDate"><select id="revenueMonth"></select></div>
+        </div>
+        <div class="stats"><div class="stat"><span>Ngày đã chọn</span><b id="selectedDayRevenue">0đ</b></div><div class="stat"><span>Tháng đã chọn</span><b id="selectedMonthRevenue">0đ</b></div><div class="stat"><span>Tiền mặt</span><b id="cashRevenue">0đ</b></div><div class="stat"><span>Chuyển khoản</span><b id="transferRevenue">0đ</b></div></div>
+        <div class="card"><h3>Doanh thu theo nhân viên / ca</h3><div id="staffRevenueTable"></div></div>
+      </section>
+
+      <!-- ADMIN SHIFTS -->
+      <section id="page-shifts" class="page admin-page hidden">
+        <div class="section-head"><div><h2>Quản lý ca</h2><p class="muted">Check IN/OUT và tính tiền kết ca theo doanh thu.</p></div></div>
+        <div class="card"><div id="shiftAdminTable"></div></div>
+      </section>
+
+      <!-- STAFF POS -->
+      <section id="page-pos" class="page staff-page hidden">
+        <div class="pos-layout">
+          <div class="catalog">
+            <div class="toolbar"><div id="categories" class="categories"></div><input id="search" class="search" placeholder="⌕  Tìm món..."></div>
+            <div id="productGrid" class="product-grid"></div>
+          </div>
+          <aside class="cart">
+            <div class="cart-head"><h2>Đơn hàng</h2><button class="outline" id="clearCart">Xóa</button></div>
+            <div id="cartItems" class="cart-items"></div>
+            <div class="cart-bottom">
+              <div class="sum-row"><span>Tạm tính</span><b id="subtotal">0đ</b></div>
+              <div class="sum-row"><span>Giảm giá</span><input id="discount" type="number" min="0" value="0"></div>
+              <div class="sum-row total"><span>Tổng tiền</span><b id="total">0đ</b></div>
+              <div class="payment-title">Phương thức thanh toán</div>
+              <div class="pay-methods"><button class="pay active" data-pay="cash">💵 Tiền mặt</button><button class="pay" data-pay="transfer">▣ Chuyển khoản</button></div>
+              <button class="checkout" id="checkout">Thanh toán <span>→</span></button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="page-myOrders" class="page staff-page hidden"><div class="section-head"><div><h2>Đơn của tôi</h2><p class="muted">Các đơn đã thanh toán bởi tài khoản hiện tại.</p></div></div><div class="card"><div id="myOrdersTable"></div></div></section>
+      <section id="page-myShift" class="page staff-page hidden"><div class="section-head"><div><h2>Ca làm việc</h2><p class="muted">Check IN khi bắt đầu và OUT khi kết thúc ca.</p></div></div><div class="card"><div id="myShiftBox"></div><div id="myShiftHistory"></div></div></section>
+    </main>
+  </div>
+</div>
+
+<div id="modal" class="modal hidden"><div class="modal-box"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div>
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
